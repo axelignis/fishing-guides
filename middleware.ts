@@ -1,28 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { locales, defaultLocale, isLocale } from './lib/i18n/config'
+import { computeLocaleRedirect } from './lib/i18n/localeRedirect'
 
 // Strategy: if pathname has no locale prefix, redirect adding defaultLocale
+export function __localeRedirect(pathname: string): string | null { return computeLocaleRedirect(pathname); }
+
 export function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl
-
-  // Ignore next internal paths and assets
-  if (
-    pathname.startsWith('/_next') ||
-    pathname.includes('/api/') ||
-    pathname.startsWith('/favicon') ||
-    pathname.startsWith('/assets')
-  ) {
-    return
-  }
-
-  const segments = pathname.split('/').filter(Boolean)
-  const first = segments[0]
-  if (first && isLocale(first)) {
-    return
-  }
-
+  const redirectPath = __localeRedirect(req.nextUrl.pathname)
+  if (!redirectPath) return
   const url = req.nextUrl.clone()
-  url.pathname = `/${defaultLocale}${pathname}`
+  url.pathname = redirectPath
   return NextResponse.redirect(url)
 }
 

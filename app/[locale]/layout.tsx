@@ -27,7 +27,7 @@ export default async function LocaleLayout({
       <body className="min-h-screen font-sans antialiased bg-background text-foreground">
         <NextIntlClientProvider messages={messages} locale={locale} timeZone="UTC">
           <header className="border-b p-4 flex items-center justify-between">
-            <strong className="text-sm">{String(messages['app.title'])}</strong>
+            <strong className="text-sm">{String((messages as any).app?.title)}</strong>
             <LanguageSwitcher currentLocale={locale as Locale} />
           </header>
           <div className="p-6">{children}</div>

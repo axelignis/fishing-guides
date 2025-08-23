@@ -6,10 +6,10 @@ export default function HomeLocalePage() {
   return (
     <main className="space-y-4">
       <div>
-        <h1 className="text-2xl font-bold">{t('app.title')}</h1>
-        <p className="text-muted-foreground text-sm mt-2">{t('app.subtitle')}</p>
+  <h1 className="text-2xl font-bold">{t('app.title')}</h1>
+  <p className="text-muted-foreground text-sm mt-2">{t('app.subtitle')}</p>
       </div>
-      <Button>{t('app.cta')}</Button>
+  <Button>{t('app.cta')}</Button>
     </main>
   )
 }

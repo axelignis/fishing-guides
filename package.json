@@ -1,12 +1,36 @@
 {
   "name": "fishing-guides-3",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Marketplace de guías de pesca deportiva (MVP)",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "echo 'No tests yet'"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": ""
+  "dependencies": {
+  "@radix-ui/react-slot": "^1.0.2",
+  "class-variance-authority": "^0.7.0",
+  "clsx": "^2.1.1",
+  "lucide-react": "^0.441.0",
+  "next": "14.2.4",
+  "react": "18.3.1",
+  "react-dom": "18.3.1",
+  "tailwind-merge": "^2.3.0"
+  },
+  "devDependencies": {
+  "@types/node": "20.11.30",
+  "@types/react": "18.2.66",
+  "@types/react-dom": "18.2.22",
+  "autoprefixer": "^10.4.19",
+  "eslint": "^8.57.0",
+  "eslint-config-next": "14.2.4",
+  "prettier": "^3.3.2",
+  "tailwindcss": "^3.4.7",
+  "tailwindcss-animate": "^1.0.7",
+  "typescript": "5.4.5"
+  }
 }

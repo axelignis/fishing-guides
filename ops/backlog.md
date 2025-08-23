@@ -3,7 +3,7 @@
 Formato: `PESC-### | Título | Tipo | Epic | SP | Estado | Criterios de aceptación (AC)`
 
 ## Prioridad Alta (MVP Core)
-PESC-001 | Setup base Next.js + TS + Tailwind + shadcn | chore | EPIC-01 | 3 | Ready | proyecto arranca `npm run dev`, Tailwind y shadcn configurados, página “/health”.
+PESC-001 | Setup base Next.js + TS + Tailwind + shadcn | chore | EPIC-01 | 3 | Done | proyecto arranca `npm run dev`, Tailwind y shadcn configurados, página “/health”.
 PESC-002 | Configuración Postgres + Prisma | chore | EPIC-01 | 3 | Ready | `DATABASE_URL` en `.env`, `prisma init`, conexión OK (sin tablas aún).
 PESC-003 | i18n next-intl (ES/EN) + toggles | feat | EPIC-01 | 3 | Backlog | cambiar idioma en header, strings básicos internacionalizados.
 PESC-004 | Modelo Prisma mínimo (User, Service, Booking, Review, Address) | feat | EPIC-02 | 5 | Backlog | `prisma migrate dev` genera tablas; constraints básicas; seeds lo pueblan.

@@ -7,5 +7,33 @@
   "nav": {
     "lang": { "es": "Spanish", "en": "English" },
     "changeLanguage": "Change language"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in"
+    },
+    "signup": {
+      "title": "Create account"
+    },
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "actions": {
+      "login": "Log in",
+      "signup": "Sign up",
+      "logout": "Log out"
+    },
+    "links": {
+      "noAccount": "Don't have an account?",
+      "haveAccount": "Already have an account?"
+    },
+    "errors": {
+      "missing_fields": "Missing required fields.",
+      "invalid_credentials": "Invalid credentials.",
+      "email_in_use": "That email is already registered.",
+      "password_policy": "Password must be at least 8 chars with 1 uppercase and 1 number.",
+      "internal_error": "Internal error. Try later.",
+      "unknown": "Unknown error"
+    }
   }
 }

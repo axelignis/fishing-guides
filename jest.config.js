@@ -11,6 +11,10 @@ const customJestConfig = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
   },
+  // Transform ESM packages that ship untranspiled code
+  transformIgnorePatterns: [
+    'node_modules/(?!jose/)'
+  ],
   testMatch: ['**/?(*.)+(spec|test).[jt]s?(x)'],
   collectCoverageFrom: [
     'app/**/*.{ts,tsx}',

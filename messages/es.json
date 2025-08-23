@@ -7,5 +7,33 @@
   "nav": {
     "lang": { "es": "Español", "en": "Inglés" },
     "changeLanguage": "Cambiar idioma"
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar sesión"
+    },
+    "signup": {
+      "title": "Crear cuenta"
+    },
+    "email": "Email",
+    "password": "Contraseña",
+    "name": "Nombre",
+    "actions": {
+      "login": "Entrar",
+      "signup": "Registrarse",
+      "logout": "Salir"
+    },
+    "links": {
+      "noAccount": "¿No tienes cuenta?",
+      "haveAccount": "¿Ya tienes cuenta?"
+    },
+    "errors": {
+      "missing_fields": "Faltan campos requeridos.",
+      "invalid_credentials": "Credenciales inválidas.",
+      "email_in_use": "Ese email ya está registrado.",
+      "password_policy": "La contraseña debe tener al menos 8 caracteres, 1 mayúscula y 1 número.",
+      "internal_error": "Error interno. Intenta más tarde.",
+      "unknown": "Error desconocido"
+    }
   }
 }

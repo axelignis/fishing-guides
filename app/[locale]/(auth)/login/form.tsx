@@ -1,11 +1,11 @@
 "use client"
 import { useState, FormEvent } from 'react'
-import { useTranslations, useLocale } from 'next-intl'
 import { Button } from '@/components/ui/button'
+import { useTranslations, useLocale } from 'next-intl'
 
 export default function LoginForm() {
   const t = useTranslations('auth')
-  const locale = useLocale()
+  const locale = useLocale() || 'en'
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -18,7 +18,7 @@ export default function LoginForm() {
       password: formData.get('password')
     }
     if (!body.email || !body.password) {
-      setError(t('errors.missing_fields'))
+  setError(t('errors.missing_fields') || 'Missing required fields')
       return
     }
     try {
@@ -28,12 +28,12 @@ export default function LoginForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       })
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        const code = data?.error || 'unknown'
-        setError(t(`errors.${code}` as any))
+    if (!res.ok) {
+  const data = await res.json().catch(() => ({}))
+  const code = data?.error || 'unknown'
+  setError(t(`errors.${code}`) || 'Unknown error')
       } else {
-        window.location.href = `/${locale}/dashboard`
+  window.location.href = `/${locale}/dashboard`
       }
     } finally {
       setLoading(false)
@@ -44,14 +44,14 @@ export default function LoginForm() {
     <form onSubmit={onSubmit} className="space-y-4">
       {error && <div className="text-sm text-red-600" role="alert">{error}</div>}
       <div className="space-y-1">
-        <label className="text-sm font-medium" htmlFor="email">{t('email')}</label>
+        <label className="text-sm font-medium" htmlFor="email">{t('email') || 'Email'}</label>
         <input id="email" name="email" type="email" className="w-full border rounded px-3 py-2 text-sm bg-background" required />
       </div>
       <div className="space-y-1">
-        <label className="text-sm font-medium" htmlFor="password">{t('password')}</label>
+        <label className="text-sm font-medium" htmlFor="password">{t('password') || 'Password'}</label>
         <input id="password" name="password" type="password" className="w-full border rounded px-3 py-2 text-sm bg-background" required />
       </div>
-      <Button disabled={loading} className="w-full" type="submit">{loading ? '...' : t('actions.login')}</Button>
+      <Button disabled={loading} className="w-full" type="submit">{loading ? '...' : (t('actions.login') || 'Log in')}</Button>
     </form>
   )
 }

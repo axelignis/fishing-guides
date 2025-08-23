@@ -1,5 +1,6 @@
 {
   "name": "fishing-guides-3",
+  "type": "module",
   "version": "0.1.0",
   "private": true,
   "description": "Marketplace de guías de pesca deportiva (MVP)",

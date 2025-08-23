@@ -1,0 +1,16 @@
+
+> fishing-guides-3@0.1.0 dev
+> next dev
+
+  ▲ Next.js 14.2.4
+  - Local:        http://localhost:3000
+  - Environments: .env
+
+ ✓ Starting...
+ ✓ Ready in 1164ms
+ ✓ Compiled /middleware in 57ms (75 modules)
+ ○ Compiling /[locale] ...
+ ✓ Compiled /[locale] in 731ms (748 modules)
+ GET /en 200 in 977ms
+ GET /en 200 in 23ms
+ ✓ Compiled in 293ms (748 modules)

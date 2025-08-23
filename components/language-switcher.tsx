@@ -1,20 +1,21 @@
 "use client"
 import { usePathname } from 'next/navigation'
+import { useLocale as useNextLocale } from 'next-intl'
 import Link from 'next/link'
-import { locales, type Locale } from '@/lib/i18n/config'
-import { useTranslations } from 'next-intl'
+import { locales } from '@/lib/i18n/config'
 import { cn } from '@/lib/utils'
+import { useTranslations } from 'next-intl'
 
-export function LanguageSwitcher({ currentLocale }: { currentLocale: Locale }) {
+export function LanguageSwitcher({ currentLocale }: { currentLocale: string }) {
   const pathname = usePathname()
-  const t = useTranslations()
+  const locale = useNextLocale()
+  const t = useTranslations('nav')
   // Remove leading locale from current path to build links
-  // path format: /{locale}/rest...
-  const segments = pathname.split('/').filter(Boolean)
+  const segments = pathname?.split('/').filter(Boolean) ?? []
   segments.shift() // remove current locale
   const restPath = segments.join('/')
   return (
-    <nav className="flex gap-2 text-xs" aria-label={t('nav.changeLanguage')}>
+    <nav className="flex gap-2 text-xs" aria-label={t('changeLanguage')}>
       {locales.map(l => {
         const href = '/' + [l, restPath].filter(Boolean).join('/')
         const active = l === currentLocale
@@ -30,7 +31,7 @@ export function LanguageSwitcher({ currentLocale }: { currentLocale: Locale }) {
             )}
             hrefLang={l}
           >
-            {t(`nav.lang.${l}`)}
+            {t('lang.' + l) ?? l}
           </Link>
         )
       })}

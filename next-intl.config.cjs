@@ -1,3 +1,9 @@
+// CommonJS config for next-intl runtime detection
+module.exports = {
+  locales: ['es', 'en'],
+  defaultLocale: 'es',
+  messagesDirectory: './messages',
+}
 // CommonJS config for next-intl - ensure runtime discovery in Next dev
 module.exports = {
   locales: ['es', 'en'],

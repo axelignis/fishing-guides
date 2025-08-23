@@ -3,8 +3,8 @@ import { isLocale } from '@/lib/i18n/config'
 import { notFound } from 'next/navigation'
 import { getMessagesSafe } from '@/lib/i18n/getMessagesSafe'
 
-export default async function HomeLocalePage({ params }: { params: { locale: string } }) {
-  const { locale } = params
+export default async function HomeLocalePage({ params }: { params?: { locale?: string } } = {}) {
+  const locale = params?.locale ?? 'es'
   if (!isLocale(locale)) return notFound()
   const messages = (await getMessagesSafe(locale)) as any
 

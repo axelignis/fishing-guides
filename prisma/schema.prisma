@@ -1,0 +1,10 @@
+// PESC-002 initial empty schema (models to be added in PESC-004)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}

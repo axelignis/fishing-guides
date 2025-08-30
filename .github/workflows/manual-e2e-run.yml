@@ -85,7 +85,15 @@ jobs:
       - name: Debug: recursive workspace listing
         run: |
           echo '--- recursive ls (truncated) ---'
-          ls -laR . | sed -n '1,400p' || true
+          mkdir -p ci-debug
+          ls -laR . | sed -n '1,400p' > ci-debug/recursive-ls.txt || true
+
+      - name: Upload debug listing artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-debug
+          path: ci-debug/recursive-ls.txt
+          if-no-files-found: warn
 
       - name: Debug: list playwright-report and test-results
         run: |

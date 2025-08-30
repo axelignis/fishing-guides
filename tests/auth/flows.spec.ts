@@ -1,5 +1,5 @@
 /** @jest-environment node */
-import { PrismaClient } from '@prisma/client'
+import { getPrisma, disconnectPrisma } from '@/lib/prisma'
 import { randomUUID } from 'crypto'
 
 // We hit the route handlers directly by importing them (unit-ish) to avoid spinning up a server.
@@ -13,11 +13,11 @@ jest.mock('@/lib/auth/session', () => ({
   getSession: jest.fn(async () => null)
 }))
 
-const prisma = new PrismaClient()
+const prisma = getPrisma()
 
 describe('auth flows', () => {
   afterAll(async () => {
-    await prisma.$disconnect()
+    await disconnectPrisma()
   })
 
   it('signup then login', async () => {

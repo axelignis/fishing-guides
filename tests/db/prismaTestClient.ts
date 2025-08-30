@@ -1,18 +1,10 @@
-import { PrismaClient } from '@prisma/client'
+import { getPrisma as libGetPrisma, disconnectPrisma as _disconnectPrisma } from '@/lib/prisma'
 
-// Reuse single PrismaClient across tests to avoid connection churn.
-// eslint-disable-next-line import/no-mutable-exports
-let prisma: PrismaClient
-
+// Keep previous test-helper API: export getPrisma and disconnectPrisma
 export function getPrisma() {
-  if (!prisma) {
-    prisma = new PrismaClient()
-  }
-  return prisma
+  return libGetPrisma()
 }
 
 export async function disconnectPrisma() {
-  if (prisma) {
-    await prisma.$disconnect()
-  }
+  await _disconnectPrisma()
 }

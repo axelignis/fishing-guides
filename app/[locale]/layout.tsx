@@ -36,8 +36,7 @@ export default async function LocaleLayout({
     session = null
   }
   return (
-    <html lang={locale} suppressHydrationWarning>
-    <body className="min-h-screen font-sans antialiased bg-background text-foreground">
+    <>
       <header className="border-b p-4 flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <strong className="text-sm">{String((messages as any).app?.title)}</strong>
@@ -64,7 +63,6 @@ export default async function LocaleLayout({
           <IntlProviderClient locale={locale} messages={messages}>
             <div className="p-6">{children}</div>
           </IntlProviderClient>
-      </body>
-    </html>
+    </>
   )
 }

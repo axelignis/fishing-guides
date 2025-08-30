@@ -76,7 +76,18 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Build Next.js app
-        run: npm run build
+        run: |
+          set -euo pipefail
+          echo "--- starting build ---"
+          mkdir -p build-logs
+          # capture stdout+stderr to file so we can inspect on failure
+          npm run build 2>&1 | tee build-logs/build.log || true
+          if [ ${PIPESTATUS[0]} -ne 0 ]; then
+            echo "Build failed — dumping last 200 lines of build log"
+            tail -n 200 build-logs/build.log || true
+            exit 1
+          fi
+          echo "--- build succeeded ---"
 
       - name: Start Next.js app
         run: |

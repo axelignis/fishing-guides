@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import { hashPassword, validatePassword, createSession } from '@/lib/auth'
+import { isEmail } from '@/lib/validation/email'
 
 const prisma = new PrismaClient()
 
@@ -10,6 +11,9 @@ export async function POST(req: NextRequest) {
     const { email, password, name, role } = body || {}
     if (!email || !password || !name) {
       return NextResponse.json({ error: 'missing_fields' }, { status: 400 })
+    }
+    if (!isEmail(email)) {
+      return NextResponse.json({ error: 'invalid_email' }, { status: 400 })
     }
     const pwCheck = validatePassword(password)
     if (!pwCheck.valid) {

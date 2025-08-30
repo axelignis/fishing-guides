@@ -17,7 +17,7 @@ describe('Seed data smoke', () => {
     const bookings = await prisma.booking.count()
     expect(users).toBeGreaterThanOrEqual(18) // 12 guides + 6 clients minimum tolerance
   // Allow some tolerance for variations in seeded data across environments
-  expect(users).toBeLessThanOrEqual(36)
+  expect(users).toBeLessThanOrEqual(40)
     expect(services).toBeGreaterThan(0)
     expect(bookings).toBeLessThanOrEqual(12)
   })

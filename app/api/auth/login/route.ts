@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { PrismaClient } from '@prisma/client'
 import { verifyPassword, createSession } from '@/lib/auth'
+import { isEmail } from '@/lib/validation/email'
 
 const prisma = new PrismaClient()
 
@@ -10,6 +11,9 @@ export async function POST(req: NextRequest) {
     const { email, password } = body || {}
     if (!email || !password) {
       return NextResponse.json({ error: 'missing_fields' }, { status: 400 })
+    }
+    if (!isEmail(email)) {
+      return NextResponse.json({ error: 'invalid_email' }, { status: 400 })
     }
     const user = await prisma.user.findUnique({ where: { email }, select: { id: true, password: true, name: true, email: true, role: true } })
     if (!user) {

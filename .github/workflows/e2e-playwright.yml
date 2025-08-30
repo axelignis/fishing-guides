@@ -64,6 +64,12 @@ jobs:
         if: steps.check.outputs.has_tests == 'true'
         run: npx playwright test --reporter=list
 
+      - name: Debug: recursive workspace listing
+        if: always() && steps.check.outputs.has_tests == 'true'
+        run: |
+          echo '--- recursive ls (truncated) ---'
+          ls -laR . | sed -n '1,400p' || true
+
       - name: Debug: list playwright-report and test-results
         if: always() && steps.check.outputs.has_tests == 'true'
         run: |

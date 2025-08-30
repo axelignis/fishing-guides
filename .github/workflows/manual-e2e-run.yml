@@ -82,6 +82,11 @@ jobs:
       - name: Run Playwright tests
         run: npx playwright test --reporter=list --reporter=html --reporter=junit
 
+      - name: Debug: recursive workspace listing
+        run: |
+          echo '--- recursive ls (truncated) ---'
+          ls -laR . | sed -n '1,400p' || true
+
       - name: Debug: list playwright-report and test-results
         run: |
           echo '--- listing playwright-report ---'

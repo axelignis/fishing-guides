@@ -8,7 +8,7 @@ PESC-002 | Configuración Postgres + Prisma | chore | EPIC-01 | 3 | Done | `DATA
 PESC-003 | i18n next-intl (ES/EN) + toggles | feat | EPIC-01 | 3 | Done | cambiar idioma en header, strings básicos internacionalizados.
 PESC-004 | Modelo Prisma mínimo (User, Service, Booking, Review, Address) | feat | EPIC-02 | 5 | Done | `prisma migrate dev` genera tablas; constraints básicas; seeds lo pueblan.
 PESC-005 | Seeds datos fake (regiones/comunas + usuarios/servicios) | chore | EPIC-02 | 5 | Done | script `npm run seed:dev` (y test `npm run db:test`) carga datos y muestra 10–20 guías distribuidos por comunas.
-PESC-006 | Auth básica (email/password) + sesiones | feat | EPIC-01 | 5 | Done | signup/login/logout; hash seguro; protección de rutas privadas.
+PESC-006 | Auth básica (email/password) + sesiones | feat | EPIC-01 | 5 | Done | signup/login/logout; hash seguro; protección de rutas privadas. (Merged in PR #4)
 PESC-007 | Ficha de prestador + listado servicios | feat | EPIC-02 | 5 | Done | ver perfil guía (bio, idiomas, comuna), ver servicios aprobados.
 PESC-008 | Búsqueda por Región/Comuna + mapa (Mapbox) | feat | EPIC-02 | 5 | Backlog | filtro por Región/Comuna, markers en mapa, lista sincronizada.
 PESC-009 | Solicitud y confirmación de reserva (agenda simple) | feat | EPIC-03 | 8 | Backlog | solicitante envía solicitud; prestador confirma; estado reflejado.

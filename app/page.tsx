@@ -1,5 +1,9 @@
 import { Button } from '@/components/ui/button'
 
+export const metadata = {
+  title: 'Fishing Guide Home - Guías de Pesca',
+}
+
 export default function HomePage() {
   return (
     <main className="p-6 space-y-4">

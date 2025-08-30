@@ -9,6 +9,8 @@ on:
 jobs:
   e2e-seeded:
     runs-on: ubuntu-latest
+    env:
+      GH_PAT: ${{ secrets.GH_PAT }}
     timeout-minutes: 45
     services:
       postgres:
@@ -117,4 +119,20 @@ jobs:
             playwright-server-fetch.html
             playwright-debug-search.html
             playwright-api-fail.json
+
+      - name: Debug: fetch run jobs JSON (uses GH_PAT)
+        if: always()
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          echo "Fetching jobs for this run via Actions API"
+          # use GITHUB_RUN_ID provided by GitHub Actions
+          if [ -z "${GITHUB_RUN_ID:-}" ]; then
+            echo "GITHUB_RUN_ID not set; skipping"
+            exit 0
+          fi
+          curl -sS -H "Authorization: Bearer $GH_PAT" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/runs/${GITHUB_RUN_ID}/jobs" > build-logs/run-jobs.json || true
+          echo "Saved run jobs to build-logs/run-jobs.json:"
+          jq -r '.jobs[] | "- " + .name + " => " + (.conclusion // "null")' build-logs/run-jobs.json || true
   # end of e2e-seeded

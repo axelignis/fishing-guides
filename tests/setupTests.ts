@@ -18,3 +18,19 @@ console.error = (...args: any[]) => {
 	}
 	return originalConsoleError(...args)
 }
+
+// Minimal global.fetch polyfill for tests (handles /api/places)
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+if (!global.fetch) {
+	// lazy require to avoid circulars
+	const mock = require('../lib/mockPlaces').default
+	// @ts-ignore
+	global.fetch = (input: any) => {
+		const url = String(input)
+		if (url.includes('/api/places')) {
+			return Promise.resolve({ json: async () => ({ data: mock, total: mock.length }) })
+		}
+		return Promise.reject(new Error('unhandled fetch in tests: ' + url))
+	}
+}

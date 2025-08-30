@@ -12,7 +12,8 @@
     "test": "jest --passWithNoTests",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
-    "seed:dev": "tsx prisma/seed.ts",
+  "seed:dev": "tsx prisma/seed.ts",
+  "seed:places": "tsx prisma/seed-places.ts",
     "db:test": "jest tests/db/seed.smoke.spec.ts"
   },
   "dependencies": {

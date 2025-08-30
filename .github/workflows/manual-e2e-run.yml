@@ -98,7 +98,7 @@ jobs:
         with:
           name: ci-debug
           path: ci-debug/recursive-ls.txt
-          if-no-files-found: warn
+            if-no-files-found: warn
 
       - name: Debug: list playwright-report and test-results
         run: |
@@ -116,4 +116,4 @@ jobs:
           path: |
             playwright-report/**
             test-results/**
-          if-no-files-found: warn
+            if-no-files-found: warn

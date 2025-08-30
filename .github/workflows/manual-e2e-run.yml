@@ -82,6 +82,15 @@ jobs:
       - name: Run Playwright tests
         run: npx playwright test --reporter=list --reporter=html --reporter=junit
 
+      - name: Debug: list playwright-report and test-results
+        run: |
+          echo '--- listing playwright-report ---'
+          ls -la playwright-report || true
+          echo '--- listing playwright-report/** (glob) ---'
+          ls -la playwright-report/** || true
+          echo '--- listing test-results ---'
+          ls -la test-results || true
+
       - name: Upload Playwright artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -89,3 +98,4 @@ jobs:
           path: |
             playwright-report/**
             test-results/**
+          if-no-files-found: warn

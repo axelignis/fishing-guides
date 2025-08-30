@@ -65,7 +65,7 @@ jobs:
         run: npx playwright test --reporter=list
 
       - name: Debug: recursive workspace listing
-        if: always() && steps.check.outputs.has_tests == 'true'
+        if: always()
         run: |
           echo '--- recursive ls (truncated) ---'
           mkdir -p ci-debug

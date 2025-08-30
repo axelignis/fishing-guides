@@ -51,13 +51,26 @@ jobs:
 
       - name: Run deterministic seed
         run: |
-          # Run npm script if present, otherwise run the seed file directly with tsx.
-          if npm run -s seed:places --silent; then
-            echo "ran npm seed:places"
+          set -euo pipefail
+          echo "--- seed step debug ---"
+          echo "node version:" $(node -v || true)
+          echo "npm version:" $(npm -v || true)
+          echo "npx version:" $(npx --version || true)
+          echo "which tsx:" $(which tsx || true)
+          echo "ls -la (repo root):"
+          ls -la
+          echo "show package.json (first 200 lines):"
+          sed -n '1,200p' package.json || true
+          echo "attempting to run 'npm run --if-present seed:places'"
+          # try npm script if present; --if-present exits 0 when missing
+          if npm run -s --if-present seed:places; then
+            echo "npm seed:places ran successfully"
           else
-            echo "npm script seed:places missing or failed; running seed file directly"
+            echo "npm seed:places failed; falling back to direct execution"
+            echo "running: npx tsx prisma/seed-places.ts"
             npx tsx prisma/seed-places.ts
           fi
+          echo "--- seed step complete ---"
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps

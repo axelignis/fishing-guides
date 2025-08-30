@@ -2,8 +2,6 @@ export async function getMessagesSafe(locale: string) {
   // Use next-intl server API (requires a valid next-intl config to be present)
   // This will throw if next-intl cannot find its config; we intentionally
   // surface the error so developers can fix their configuration.
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore - dynamic import shapes differ between ESM and CJS builds
   const mod: any = await import('next-intl/server')
 
   // Try several common interop shapes to locate a callable getMessages

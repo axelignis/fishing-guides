@@ -1,11 +1,11 @@
 // NOTE: Workaround: direct import of enums from generated .prisma client due to re-export typing anomaly
-import { PrismaClient } from '@prisma/client'
+import { getPrisma } from '@/lib/prisma'
 import { UserRole, ServiceStatus, Currency, BookingStatus } from '.prisma/client'
 import { faker } from '@faker-js/faker'
 import bcrypt from 'bcryptjs'
 import { regions } from './data/regions'
 
-const prisma = new PrismaClient()
+const prisma = getPrisma()
 
 async function main() {
   console.log('Seeding start...')

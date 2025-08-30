@@ -1,0 +1,59 @@
+name: E2E - Playwright
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check for Playwright tests
+        id: check
+        run: |
+          if [ -f playwright.config.ts ] || [ -f playwright.config.js ] || [ -d tests/e2e ] || ls tests/playwright* >/dev/null 2>&1; then
+            echo "has_tests=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_tests=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Skip if no Playwright tests
+        if: steps.check.outputs.has_tests == 'false'
+        run: |
+          echo "No Playwright config or e2e tests detected — skipping E2E job."
+
+      - name: Install Playwright browsers
+        if: steps.check.outputs.has_tests == 'true'
+        run: npx playwright install --with-deps
+
+      - name: Start dev server
+        if: steps.check.outputs.has_tests == 'true'
+        run: |
+          npm run build || true
+          npm run start &
+          # wait for server to be ready
+          for i in {1..30}; do
+            if curl -sS http://localhost:3000 > /dev/null; then
+              echo "server ready"; break
+            fi
+            sleep 1
+          done
+        env:
+          NODE_ENV: test
+
+      - name: Run Playwright tests
+        if: steps.check.outputs.has_tests == 'true'
+        run: npx playwright test --reporter=list

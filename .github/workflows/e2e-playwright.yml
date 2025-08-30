@@ -71,6 +71,12 @@ jobs:
           mkdir -p ci-debug
           ls -laR . | sed -n '1,400p' > ci-debug/recursive-ls.txt || true
 
+      - name: Debug: print head of recursive listing to job log
+        if: always()
+        run: |
+          echo '--- recursive ls head (job log) ---'
+          head -n 200 ci-debug/recursive-ls.txt || true
+
       - name: Upload debug listing artifact
         if: always()
         uses: actions/upload-artifact@v4

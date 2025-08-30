@@ -3,6 +3,8 @@ name: E2E - Playwright
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  push:
+    branches: [master]
 
 jobs:
   e2e:

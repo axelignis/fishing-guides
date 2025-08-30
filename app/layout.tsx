@@ -4,7 +4,7 @@ import './globals.css'
 import ClientSafety from '@/components/client-safety'
 
 export const metadata = {
-  title: 'Pesca Marketplace',
+  title: 'Fishing Guide Home - Pesca Marketplace',
   description: 'MVP Guías de Pesca',
 }
 

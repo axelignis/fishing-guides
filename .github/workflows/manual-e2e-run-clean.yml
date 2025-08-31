@@ -1,0 +1,30 @@
+name: Manual E2E Runner (clean)
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Git ref to checkout and run E2E against'
+        required: false
+        default: 'master'
+
+jobs:
+  debug-listing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Save recursive workspace listing
+        run: |
+          mkdir -p ci-debug
+          ls -laR . | sed -n '1,1000p' > ci-debug/recursive-ls.txt || true
+
+      - name: Print head of recursive listing
+        run: head -n 200 ci-debug/recursive-ls.txt || true
+
+      - name: Upload debug listing artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-debug
+          path: ci-debug/recursive-ls.txt
+          if-no-files-found: warn

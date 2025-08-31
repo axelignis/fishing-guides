@@ -1,5 +1,4 @@
 name: E2E - Playwright
-name: E2E - Playwright
 
 on:
   pull_request:
@@ -13,19 +12,30 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm ci
 
-      - name: Check for Playwright tests
+      - name: "Early: Save recursive listing"
+        if: always()
+        run: |
+          mkdir -p ci-debug
+          ls -laR . > ci-debug/recursive-ls.txt || true
+
+      - name: "Early: Upload debug listing"
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-debug
+          path: ci-debug/recursive-ls.txt
+          if-no-files-found: warn
+
+      - name: Detect Playwright
         id: check
         run: |
           if [ -f playwright.config.ts ] || [ -f playwright.config.js ] || [ -d tests/e2e ] || ls tests/playwright* >/dev/null 2>&1; then
@@ -34,24 +44,15 @@ jobs:
             echo "has_tests=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: Skip if no Playwright tests
-        if: steps.check.outputs.has_tests == 'false'
-        run: |
-          echo "No Playwright config or e2e tests detected — skipping E2E job."
-
       - name: Install Playwright browsers
         if: steps.check.outputs.has_tests == 'true'
         run: npx playwright install --with-deps
 
-      - name: Build Next.js app
-        if: steps.check.outputs.has_tests == 'true'
-        run: npm run build
-
-      - name: Start Next.js app
+      - name: Build and start app
         if: steps.check.outputs.has_tests == 'true'
         run: |
+          npm run build
           npm run start &
-          # wait for server to be ready
           for i in {1..30}; do
             if curl -sS http://localhost:3000 > /dev/null; then
               echo "server ready"; break
@@ -63,33 +64,22 @@ jobs:
 
       - name: Run Playwright tests
         if: steps.check.outputs.has_tests == 'true'
-        run: npx playwright test --reporter=list
+        run: npx playwright test --reporter=list,html,junit --workers=2 --trace on || true
 
-      - name: Debug: recursive workspace listing
+      - name: Save recursive listing
         if: always()
         run: |
-          echo '--- recursive ls (truncated) ---'
           mkdir -p ci-debug
-          ls -laR . | sed -n '1,400p' > ci-debug/recursive-ls.txt || true
+          ls -laR . > ci-debug/recursive-ls.txt || true
 
-      - name: Debug: print head of recursive listing to job log
+      - name: Print head of listing
+        if: always()
+        run: head -n 200 ci-debug/recursive-ls.txt || true
+
+      - name: "Debug: list playwright-report and test-results"
         if: always()
         run: |
-          echo '--- recursive ls head (job log) ---'
-          head -n 200 ci-debug/recursive-ls.txt || true
-
-      - name: Upload debug listing artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ci-debug
-          path: ci-debug/recursive-ls.txt
-          if-no-files-found: warn
-
-      - name: Debug: list playwright-report and test-results
-        if: always() && steps.check.outputs.has_tests == 'true'
-        run: |
-          echo '--- listing playwright-report ---'
+          echo '--- listing playwright-report root ---'
           ls -la playwright-report || true
           echo '--- listing playwright-report/**/trace.zip (glob) ---'
           ls -la playwright-report/**/trace.zip || true
@@ -97,27 +87,28 @@ jobs:
           ls -la test-results || true
 
       - name: Upload Playwright traces
-        if: always() && steps.check.outputs.has_tests == 'true'
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-traces
+          path: playwright-report/**/trace.zip
+          if-no-files-found: warn
+
+      - name: Upload debug listing
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-debug
+          path: ci-debug/recursive-ls.txt
+          if-no-files-found: warn
+
+      - name: Upload Playwright artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts
           path: |
             playwright-report/**/trace.zip
             playwright-report
             test-results/**
-          if-no-files-found: warn
-
-      - name: Debug: confirm report folder before upload
-        if: always() && steps.check.outputs.has_tests == 'true'
-        run: |
-          echo '--- final check: playwright-report root ---'
-          ls -la playwright-report || true
-
-      - name: Upload Playwright report
-        if: always() && steps.check.outputs.has_tests == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: |
-            playwright-report
           if-no-files-found: warn

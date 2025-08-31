@@ -2,16 +2,16 @@ name: Manual E2E Runner
 
 on:
   workflow_dispatch:
-          name: manual-playwright-report
-          path: |
-            playwright-report/**
-            test-results/**
-          if-no-files-found: warn
+    inputs:
+      ref:
+        description: 'Git ref to checkout and run E2E against'
+        required: true
         default: 'feature/PESC-008-search'
 
 jobs:
   run-e2e:
     runs-on: ubuntu-latest
+    name: Manual E2E Runner
     timeout-minutes: 45
     services:
       postgres:
@@ -51,10 +51,10 @@ jobs:
         env:
           PGPASSWORD: postgres
 
-      - name: Run Prisma deploy (db push)
+      - name: Run Prisma db push
         run: npx prisma db push --accept-data-loss
 
-      - name: Run deterministic seed
+      - name: Run seed
         run: |
           set -euo pipefail
           if npm run -s --if-present seed:places; then
@@ -66,32 +66,27 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Build Next.js app
-        run: |
-          npm run build
+      - name: Build
+        run: npm run build
 
-      - name: Start Next.js app
+      - name: Start app
         run: |
           NODE_ENV=production npm run start &
           for i in {1..30}; do
-            if curl -sS http://localhost:3000 > /dev/null; then
-              echo "server ready"; break
-            fi
+            if curl -sS http://localhost:3000 > /dev/null; then echo 'server ready'; break; fi
             sleep 1
           done
 
       - name: Run Playwright tests
         run: npx playwright test --reporter=list --reporter=html --reporter=junit
 
-      - name: Debug: recursive workspace listing
+      - name: "Debug: recursive workspace listing"
         run: |
-          echo '--- recursive ls (truncated) ---'
           mkdir -p ci-debug
           ls -laR . | sed -n '1,400p' > ci-debug/recursive-ls.txt || true
 
-      - name: Debug: print head of recursive listing to job log
+      - name: "Debug: print head of recursive listing to job log"
         run: |
-          echo '--- recursive ls head (job log) ---'
           head -n 200 ci-debug/recursive-ls.txt || true
 
       - name: Upload debug listing artifact
@@ -101,19 +96,17 @@ jobs:
           path: ci-debug/recursive-ls.txt
           if-no-files-found: warn
 
-      - name: Debug: list playwright-report and test-results
+      - name: "Debug: list playwright-report and test-results"
         run: |
-          echo '--- listing playwright-report ---'
           ls -la playwright-report || true
-          echo '--- listing playwright-report/** (glob) ---'
           ls -la playwright-report/** || true
-          echo '--- listing test-results ---'
           ls -la test-results || true
 
       - name: Upload Playwright artifacts
         uses: actions/upload-artifact@v4
         with:
-            name: manual-playwright-report
-            path: playwright-report/**
-            if-no-files-found: warn
-            path: test-results/**
+          name: manual-playwright-report
+          path: |
+            playwright-report/**
+            test-results/**
+          if-no-files-found: warn

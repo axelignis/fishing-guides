@@ -1,4 +1,5 @@
 name: E2E - Playwright
+name: E2E - Playwright
 
 on:
   pull_request:

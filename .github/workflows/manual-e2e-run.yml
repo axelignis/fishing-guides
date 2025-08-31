@@ -2,10 +2,11 @@ name: Manual E2E Runner
 
 on:
   workflow_dispatch:
-    inputs:
-      ref:
-        description: 'Git ref to checkout and run E2E against'
-        required: true
+          name: manual-playwright-report
+          path: |
+            playwright-report/**
+            test-results/**
+          if-no-files-found: warn
         default: 'feature/PESC-008-search'
 
 jobs:
@@ -98,7 +99,7 @@ jobs:
         with:
           name: ci-debug
           path: ci-debug/recursive-ls.txt
-            if-no-files-found: warn
+          if-no-files-found: warn
 
       - name: Debug: list playwright-report and test-results
         run: |
@@ -112,8 +113,7 @@ jobs:
       - name: Upload Playwright artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: manual-playwright-report
-          path: |
-            playwright-report/**
-            test-results/**
+            name: manual-playwright-report
+            path: playwright-report/**
             if-no-files-found: warn
+            path: test-results/**

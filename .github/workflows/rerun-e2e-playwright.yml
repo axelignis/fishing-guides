@@ -1,0 +1,38 @@
+name: Rerun latest E2E Playwright
+
+on:
+  push:
+    branches: [ rerun-e2e ]
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  rerun:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Rerun latest e2e-playwright.yml run
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            core.info('Finding latest run of e2e-playwright.yml')
+            const runs = await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'e2e-playwright.yml',
+              per_page: 1
+            })
+            if (!runs.data || !runs.data.workflow_runs || runs.data.workflow_runs.length === 0) {
+              core.setFailed('No workflow runs found for e2e-playwright.yml')
+              return
+            }
+            const runId = runs.data.workflow_runs[0].id
+            core.info(`Rerunning run id ${runId}`)
+            await github.rest.actions.reRunWorkflow({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: runId
+            })
+            core.info('Rerun requested')

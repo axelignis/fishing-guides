@@ -1,0 +1,28 @@
+name: Dispatch E2E Playwright
+
+on:
+  push:
+    branches: [ dispatch-e2e ]
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch e2e-playwright.yml workflow
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            core.info(`Dispatching e2e-playwright.yml on ref 'master'`)
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'e2e-playwright.yml',
+              ref: 'master',
+              inputs: {}
+            })
+            core.info('Dispatched e2e-playwright.yml')
